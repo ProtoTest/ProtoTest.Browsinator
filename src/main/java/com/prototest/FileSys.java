@@ -22,7 +22,7 @@ public class FileSys {
         java.util.Date date = new java.util.Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH_mm");
         String timestamp = sdf.format(date);
-        String folderName = "Screenshots " + timestamp;
+        String folderName = "Browsinator Screenshots " + timestamp;
 
         File outputDir = new File(path + separator + folderName);
         System.out.println("Creating screenshots output folder: (" + outputDir + ").");
