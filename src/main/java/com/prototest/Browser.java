@@ -2,10 +2,7 @@ package com.prototest;
 
 import org.apache.commons.io.FileUtils;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -14,6 +11,7 @@ import org.openqa.selenium.safari.SafariDriver;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +37,7 @@ public class Browser {
         if (config.getBrowserIE()) {
             System.out.println("Launching Internet Explorer...");
             new Browser(new InternetExplorerDriver(ieCapabilities));
-            resizeWindow();
+            //resizeWindow();
             webDriver.get(config.getUrl().toString());
             waitForPageToLoad();
             try {
@@ -47,7 +45,8 @@ public class Browser {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            takeScreenshotIE(FileSys.outputFolderIE.toPath());
+            //takeScreenshotIE(FileSys.outputFolderIE.toPath());
+            takeScreenshotArrayIE(FileSys.outputFolderIE.toPath());
             webDriver.quit();
             //webDriver.close();  >>> Unable to get browser error - DO NOT USE
 
@@ -59,10 +58,11 @@ public class Browser {
         if (config.getBrowserFirefox()) {
             System.out.println("Launching Firefox...");
             new Browser(new FirefoxDriver());
-            resizeWindow();
+            //resizeWindow();
             webDriver.get(config.getUrl().toString());
             waitForPageToLoad();
-            takeScreenshot(FileSys.outputFolderFirefox.toPath());
+            //takeScreenshot(FileSys.outputFolderFirefox.toPath());
+            takeScreenshotArray(FileSys.outputFolderFirefox.toPath());
             webDriver.quit();
         }
     }
@@ -73,10 +73,11 @@ public class Browser {
         if (config.getBrowserChrome()) {
             System.out.println("Launching Chrome...");
             new Browser(new ChromeDriver());
-            resizeWindow();
+            //resizeWindow();
             webDriver.get(config.getUrl().toString());
             waitForPageToLoad();
-            takeScreenshot(FileSys.outputFolderChrome.toPath());
+            //takeScreenshot(FileSys.outputFolderChrome.toPath());
+            takeScreenshotArray(FileSys.outputFolderChrome.toPath());
             webDriver.quit();
         }
     }
@@ -147,5 +148,51 @@ public class Browser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void takeScreenshotArray(Path path) {
+        config = new Config();
+        int browserWidthMin = config.getBrowserWidthMin();
+        int browserWidthMax = config.getBrowserWidthMax();
+        int browserWidthStep = config.getBrowserWidthStep();
+        int browserWidthHeight = config.getBrowserHeight();
+
+        int i;
+        for(i = browserWidthMin; i < browserWidthMax; i += browserWidthStep){
+            webDriver.manage().window().setSize(new org.openqa.selenium.Dimension(i, browserWidthHeight));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            takeScreenshot(path);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        webDriver.manage().window().setSize(new org.openqa.selenium.Dimension(browserWidthMax, browserWidthHeight));
+        takeScreenshot(path);
+
+    }
+
+    public static void takeScreenshotArrayIE(Path path) {
+        config = new Config();
+        int browserWidthMin = config.getBrowserWidthMin();
+        int browserWidthMax = config.getBrowserWidthMax();
+        int browserWidthStep = config.getBrowserWidthStep();
+        int browserWidthHeight = config.getBrowserHeight();
+
+        int i;
+        for(i = browserWidthMin; i < browserWidthMax; i += browserWidthStep){
+            webDriver.manage().window().setSize(new org.openqa.selenium.Dimension(i, browserWidthHeight));
+            takeScreenshot(path);
+        }
+
+        webDriver.manage().window().setSize(new org.openqa.selenium.Dimension(browserWidthMax, browserWidthHeight));
+        takeScreenshotIE(path);
+
     }
 }

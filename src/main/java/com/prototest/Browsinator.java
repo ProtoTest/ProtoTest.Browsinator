@@ -7,6 +7,7 @@ public class Browsinator
 {
 
     public static void main(String[] args) throws IOException {
+
         FileSys.createOutputFolder();
         FileSys.createBrowserFolders();
         Browser.runInternetExplorer();

@@ -16,6 +16,10 @@ public class Config {
     private boolean BrowserChrome;
     private boolean BrowserSafari;
     private String outputPath;
+    private int minWidthPix;
+    private int maxWidthPix;
+    private int stepSizePix;
+    private int maxHeightPix;
 
     String propFileName = "config.properties";
     InputStream propertiesInputStream = Browsinator.class.getClassLoader().getResourceAsStream(propFileName);
@@ -64,6 +68,12 @@ public class Config {
 
             //OUTPUT PATH
             outputPath = properties.getProperty("fileOutputPath");
+
+            //BROWSER SIZING
+            minWidthPix = Integer.parseInt(properties.getProperty("minWidthPixels"));
+            maxWidthPix = Integer.parseInt(properties.getProperty("maxWidthPixels"));
+            stepSizePix = Integer.parseInt(properties.getProperty("stepSizePixels"));
+            maxHeightPix = Integer.parseInt(properties.getProperty("maxHeightPixels"));
         }
         catch(Exception e){
             throw new RuntimeException(e.getMessage());
@@ -125,4 +135,23 @@ public class Config {
         return outputPath;
     }
 
+    public int getBrowserWidthMin() {
+        System.out.println("Loading Minimum Browser Size: (" + minWidthPix + ").");
+        return minWidthPix;
+    }
+
+    public int getBrowserWidthMax() {
+        System.out.println("Loading Minimum Browser Size: (" + maxWidthPix + ").");
+        return maxWidthPix;
+    }
+
+    public int getBrowserWidthStep() {
+        System.out.println("Loading Minimum Browser Size: (" + stepSizePix + ").");
+        return stepSizePix;
+    }
+
+    public int getBrowserHeight() {
+        System.out.println("Loading Minimum Browser Size: (" + maxHeightPix + ").");
+        return maxHeightPix;
+    }
 }
